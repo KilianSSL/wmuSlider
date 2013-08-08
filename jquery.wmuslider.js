@@ -232,10 +232,12 @@
             var init = function() {
                 var slide = $(slides[currentIndex]);
                 var img = slide.find('img');
-                img.load(function() {
-                    wrapper.show();
-                    $this.animate({ height: slide.innerHeight() });
-                });
+                img.one('load', function() {
+    			   wrapper.show();
+                    $this.height(slide.innerHeight());
+				}).each(function() {
+				  if(this.complete) $(this).load(); // load didn't fire on iOS when image was cached
+				});
                 if (options.animation == 'fade') {
                     slides.css({
                         position: 'absolute',
